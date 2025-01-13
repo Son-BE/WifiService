@@ -3,6 +3,11 @@ plugins {
   id 'war'
 }
 
+war{
+  archiveBaseName = 'WifiService'
+  version = ''
+}
+
 group 'com.zerobase'
 version '1.0-SNAPSHOT'
 
@@ -24,12 +29,11 @@ tasks.withType(JavaCompile) {
 dependencies {
   compileOnly('jakarta.servlet:jakarta.servlet-api:6.1.0')
 
+  implementation 'mysql:mysql-connector-java:8.0.33'
   implementation 'com.google.code.gson:gson:2.10.1'
   implementation 'org.projectlombok:lombok:1.18.30'
   implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
   implementation "com.squareup.okhttp3:okhttp:4.11.0"
-
-
   annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")

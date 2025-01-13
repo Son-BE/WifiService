@@ -1,10 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+  String contextParamValue = application.getInitParameter("contextParamName");
+%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>와이파이 정보 구하기</title>
   <style>
+    a { text-decoration: none }
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -56,27 +61,29 @@
       background-color: antiquewhite;
     }
   </style>
+
 </head>
 <body>
 <h1>와이파이 정보 구하기</h1>
 
 <!-- 네비게이션 -->
 <nav>
-  <a href="#">홈</a>|
-  <a href="#">위치 히스토리 목록|</a>|
-  <a href="#">Open API 와이파이 정보 가져오기</a>|
-  <a href="#">즐겨 찾기 보기</a>|
-  <a href="#">즐겨 찾기 그룹 관리</a>
+  <a href="/view/index.jsp" class="btn btn-info" role="button" >홈</a>|
+  <a href="/HomeServlet" class="btn btn-warning" role="button">  위치 히스토리 목록</a>|
+  <a href="loadWifi.jsp">  Open API 와이파이 정보 가져오기  </a>|
+  <a href="bookmark_view.jsp"> 즐겨 찾기 보기</a>|
+  <a href="bookmark_group.jsp"> 즐겨찾기 그룹 관리</a>
 </nav>
 
 <!-- 위치 정보 입력 -->
-<form>
+<form action="/LocationServlet" class="location-form">
   <label for="lat">LAT:</label>
   <input type="text" id="lat" name="lat" placeholder="위도 입력">
   <label for="lnt">LNT:</label>
   <input type="text" id="lnt" name="lnt" placeholder="경도 입력">
   <button type="button" onclick="getCurrentLocation()">내 위치 가져오기</button>
   <button type="submit">근처 WIFI 정보 보기</button>
+
 </form>
 
 <!-- 와이파이 정보 테이블 -->
@@ -90,6 +97,7 @@
     <th>도로명주소</th>
     <th>상세주소</th>
     <th>설치위치(층)</th>
+    <th>설치유형</th>
     <th>설치기관</th>
     <th>서비스구분</th>
     <th>망종류</th>
@@ -102,12 +110,28 @@
   </tr>
   </thead>
   <tbody>
-  <!-- 초기 상태 메시지 -->
-  <tr id="initialMessage">
-    <td colspan="30" style="text-align: center; background-color: white; color: black;">
-      위치 정보를 입력한 후 조회 버튼을 눌러주세요.
-    </td>
+  <c:forEach items="${searchList}" var="wifi">
+  <tr class="warning">
+    <td><c:out value="${wifi.distance}"/></td>
+    <td><c:out value="${wifi.mgrNo}"/></td>
+    <td><c:out value="${wifi.wrdofc}"/></td>
+    <td><c:out value="${wifi.mainNm}"/></td>
+    <td><c:out value="${wifi.adres1}"/></td>
+    <td><c:out value="${wifi.adres2}"/></td>
+    <td><c:out value="${wifi.floor}"/></td>
+    <td><c:out value="${wifi.ty}"/></td>
+    <td><c:out value="${wifi.mby}"/></td>
+    <td><c:out value="${wifi.svcSe}"/></td>
+    <td><c:out value="${wifi.cmcwr}"/></td>
+    <td><c:out value="${wifi.year}"/></td>
+    <td><c:out value="${wifi.door}"/></td>
+    <td><c:out value="${wifi.remars3}"/></td>
+    <td><c:out value="${wifi.lat}"/></td>
+    <td><c:out value="${wifi.lnt}"/></td>
+    <td><c:out value="${wifi.dttm}"/></td>
+
   </tr>
+  </c:forEach>
   </tbody>
 </table>
 
@@ -142,6 +166,19 @@
       );
     } else {
       alert("브라우저가 위치 정보를 지원하지 않습니다.");
+    }
+  }
+  function  restartLocation(){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        var latitude = pos.coords.latitude;
+        var longitude = pos.coords.longitude;
+
+        document.getElementById('latitude-input').value = latitude;
+        document.getElementById('longitude-input').value = longitude;
+      });
+    } else {
+      alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.")
     }
   }
 

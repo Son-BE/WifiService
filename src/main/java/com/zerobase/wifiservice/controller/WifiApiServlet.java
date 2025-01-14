@@ -1,53 +1,28 @@
 package com.zerobase.wifiservice.controller;
 
-import com.zerobase.wifiservice.dao.Dao;
-import com.zerobase.wifiservice.dto.RowDto;
-import com.zerobase.wifiservice.dto.WifiDto;
-import com.zerobase.wifiservice.testPage.WifiApiJsonService;
-import jakarta.servlet.RequestDispatcher;
+import com.zerobase.wifiservice.JDBCRepository;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 
-@WebServlet("/ApiWifiController")
+@WebServlet("/wifiCount")
 public class WifiApiServlet extends HttpServlet {
+    private final JDBCRepository jdbcRepository = new JDBCRepository();
 
-    WifiApiJsonService wifiApiJsonService = new WifiApiJsonService();
-    Dao dao = new Dao();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        int totalCount = jdbcRepository.countTotalWifiRecords();
 
-    @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response)
-        throws IOException {
-
-        try {
-            int count = wifiApiJsonService.getTotalPageCount();
-
-            int start = 0;
-            int end = 999;
-
-            dao.removeAllData();
-
-            for (int i = 0; i < count; i++) {
-                System.out.println(start + " , " + end);
-                WifiDto wifiDto = wifiApiJsonService.requestApiResponseToDto(start,end);
-
-                List<RowDto> rowDtoList = wifiDto.getWifiRow();
-                dao.saveAllWifiList(rowDtoList);
-
-                start += 1000;
-                end += 1000;
-            }
-
-            request.setAttribute("apiWifiTotalCount", wifiApiJsonService.getTotalCount());
-            RequestDispatcher dispatcher = request.getRequestDispatcher("view/loadWifi.jsp");
-            dispatcher.forward(request,response);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.println("<html><head><title>WiFi 데이터 개수</title></head><body>");
+        out.println("<h2 style='text-align: center; font-size: 24pt;'>" + totalCount + "개의 와이파이 정보를 성공적으로 저장했습니다.</h2>");
+        out.println("<a href='index.jsp' style='display: block; text-align: center; font-size: 12pt; margin-top: 20px;'>홈</a>");
+        out.println("</body></html>");
     }
-
 }

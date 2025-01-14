@@ -26,7 +26,7 @@ public class HistoryController extends HttpServlet {
 
         request.setAttribute("selectAll", list);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("view/select.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("select.jsp");
         dispatcher.forward(request, response);
     }
 

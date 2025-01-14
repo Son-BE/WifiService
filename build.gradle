@@ -4,7 +4,7 @@ plugins {
 }
 
 war{
-  archiveBaseName = 'WifiService'
+  archiveBaseName = 'ROOT'
   version = ''
 }
 
@@ -32,13 +32,16 @@ dependencies {
   implementation 'mysql:mysql-connector-java:8.0.33'
   implementation 'com.google.code.gson:gson:2.10.1'
   implementation 'org.projectlombok:lombok:1.18.30'
-  implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
   implementation "com.squareup.okhttp3:okhttp:4.11.0"
+
   annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+
+  providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
 
 test {
-useJUnitPlatform()}
+  useJUnitPlatform()}

@@ -1,10 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.sql.*" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    String contextParamValue = application.getInitParameter("contextParamName");
+%>
+
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>WiFi 정보 서비스</title>
-    <style type="text/css">
+    <meta charset="UTF-8">
+    <title>와이파이 정보</title>
+    <style>
         a { text-decoration: none }
         body {
             font-family: Arial, sans-serif;
@@ -60,40 +64,58 @@
 
 </head>
 <body>
-<h1>위치 히스토리 목록</h1>
-<p>
-    <a href="http://localhost:8080/view/index.jsp">홈</a> |
-    <a href="http://localhost:8080/view/history_list.jsp">위치 히스토리 목록</a> |
-    <a href="http://localhost:8080/view/loadWifi.jsp">Open API 정보 가져오기</a> |
-    <a href="http://localhost:8080/view/history_bookmark_view.jspa">즐겨찾기 보기</a> |
-    <a href="http://localhost:8080/view/history_bookmark_group.jsp">즐겨찾기 관리</a>
-</p>
+<h1>와이파이 정보</h1>
 
+<!-- 네비게이션 -->
+<nav>
+    <a href="index.jsp" class="btn btn-info" role="button" >홈</a>|
+    <a href="${pageContext.request.contextPath}/HomeServlet" class="btn btn-warning" role="button">  위치 히스토리 목록</a>|
+    <a href="loadWifi.jsp">  Open API 와이파이 정보 가져오기  </a>|
+    <a href="bookmark_view.jsp"> 즐겨 찾기 보기</a>|
+    <a href="bookmark_group.jsp"> 즐겨찾기 그룹 관리</a>
+</nav>
 
+<!-- 위치 정보 입력 -->
+<form id="${pageContext.request.contextPath}/LocationServlet" class="location-form">
+    <label for="lat">LAT:</label>
+    <input type="text" id="lat" name="lat" placeholder="위도 입력">
+    <label for="lnt">LNT:</label>
+    <input type="text" id="lnt" name="lnt" placeholder="경도 입력">
+    <button type="button" onclick="getCurrentLocation()">내 위치 가져오기</button>
+    <button type="submit">근처 WIFI 정보 보기</button>
 
-<form action="view/bookmark_group_add.jsp" method="get">
-    <button type="submit">북마크 그룹이름 추가</button>
 </form>
 
-<table border="1">
-    <thead>
+<!-- 와이파이 정보 테이블 -->
+<table>
+
     <tr>
-        <th>ID</th>
-        <th>북마크 이름</th>
-        <th>순서</th>
-        <th>등록일자</th>
-        <th>수정일자</th>
-        <th>비고</th>
+        <th>거리(km)</th>
+        <th>관리번호</th>
+        <th>자치구</th>
+        <th>와이파이명</th>
+        <th>도로명주소</th>
+        <th>상세주소</th>
+        <th>설치위치(층)</th>
+        <th>설치유형</th>
+        <th>설치기관</th>
+        <th>서비스구분</th>
+        <th>망종류</th>
+        <th>설치년도</th>
+        <th>실내외구분</th>
+        <th>WIFI접속환경</th>
+        <th>X좌표</th>
+        <th>Y좌표</th>
+        <th>작업일자</th>
+    </tr>
+    <tr>
+
 
     </tr>
-    </thead>
-    <tbody id="wifiData">
-    <tr id="initialMessage">
-        <td colspan="30" style="text-align: center; background-color: white; color: black;">
-            정보가 존재하지 않습니다.
-        </td>
+
     </tbody>
 </table>
+
 <script>
     function getCurrentLocation() {
         if (navigator.geolocation) {
@@ -127,7 +149,21 @@
             alert("브라우저가 위치 정보를 지원하지 않습니다.");
         }
     }
+    function  restartLocation(){
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (pos) {
+                var latitude = pos.coords.latitude;
+                var longitude = pos.coords.longitude;
+
+                document.getElementById('latitude-input').value = latitude;
+                document.getElementById('longitude-input').value = longitude;
+            });
+        } else {
+            alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.")
+        }
+    }
 
 </script>
+
 </body>
 </html>

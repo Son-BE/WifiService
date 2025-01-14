@@ -1,41 +1,44 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: son
-  Date: 25. 1. 12.
-  Time: 오후 8:41
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="com.zerobase.wifiservice.JDBCRepository" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.sql.*" %>
+<!DOCTYPE html>
 <html>
-<style>
-    body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0;
-        height: 100vh;
-        justify-content: flex-start;
-        padding-top: 0px;
-    }
-    .message {
-        font-size: 20pt;
-        font-weight: bold;
-        color: black;
-        text-align: center;
-    }
-    .home-link {
-        font-size: 12pt;
-        margin-top: 10px;
-    }
-</style>
+<head>
+    <title>WiFi 데이터 개수</title>
+    <style>
+        body {
+            text-align: center; /* 중앙 정렬 */
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif; /* 글꼴 설정 */
+        }
+        h2 {
+            font-size: 24pt; /* 30pt 크기 설정 */
+        }
+        a {
+            font-size: 12pt; /* 12pt 크기 설정 */
+            display: block; /* 링크를 블록 요소로 설정하여 중앙에 위치시킴 */
+            margin-top: 20px; /* 상단 여백 설정 */
+        }
+    </style>
 </head>
 <body>
-<p class="message">${apiWifiTotalCount}개의 WIFI정보를 정상적으로 저장하였습니다.</p>
-<a href="/view/index.jsp" class="btn btn-info home-link" role="button">홈으로 가기</a>
-<h1>
+<%
+    JDBCRepository jdbcRepository = new JDBCRepository(); // JDBCRepository 객체 생성
+    int totalCount = 0; // 총 개수 초기화
 
-
-
-</h1>
+    try {
+        totalCount = jdbcRepository.countTotalWifiRecords(); // 저장된 와이파이 정보 카운트
+%>
+<h2><%= totalCount %>개의 와이파이 정보를 성공적으로 저장했습니다.</h2>
+<%
+} catch (Exception e) {
+    e.printStackTrace();
+%>
+<h2>데이터를 가져오는 중 오류가 발생했습니다.</h2>
+<%
+    }
+%>
+<a href="index.jsp">홈</a>
 </body>
 </html>

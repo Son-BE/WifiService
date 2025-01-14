@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.sql.*" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,17 +62,15 @@
 </head>
 <body>
 <h1>와이파이 정보 구하기</h1>
-<p>
-  <a href="http://localhost:8080/view/index.jsp">홈</a> |
-  <a href="http://localhost:8080/view/history_list.jsp">위치 히스토리 목록</a> |
-  <a href="http://localhost:8080/view/loadWifi.jsp">Open API 정보 가져오기</a> |
-  <a href="http://localhost:8080/view/bookmark_view.jsp">즐겨찾기 보기</a> |
-  <a href="http://localhost:8080/view/bookmark_group.jsp">즐겨찾기 관리</a>
-</p>
+<nav>
+  <a href="index.jsp">홈</a> |
+  <a href="history_list.jsp">위치 히스토리 목록</a> |
+  <a href="loadWifi.jsp">Open API 와이파이 정보 가져오기</a> |
+  <a href="bookmark_view.jsp">즐겨 찾기 보기</a> |
+  <a href="bookmark_group.jsp">즐겨찾기 그룹 관리</a>
+</nav>
 
-
-
-<form action="searchWifi" method="get">
+<form action="wifi_list.jsp" method="get">
   <label for="lat">LAT:</label>
   <input type="text" id="lat" name="lat" placeholder="위도 입력">
   <label for="lnt">LNT:</label>
@@ -102,11 +101,27 @@
     <th>작업일자</th>
   </tr>
   </thead>
-  <tbody id="wifiData">
-  <tr id="initialMessage">
-    <td colspan="30" style="text-align: center; background-color: white; color: black;">
-      위치 정보를 입력한 후 조회 버튼을 눌러주세요.
-    </td>
+  <tbody>
+  <c:forEach var="wifi" items="${wifiList}">
+    <tr>
+      <td>${wifi.distance}</td>
+      <td>${wifi.X_SWIFI_MGR_NO}</td>
+      <td>${wifi.X_SWIFI_WRDOFC}</td>
+      <td>${wifi.X_SWIFI_MAIN_NM}</td>
+      <td>${wifi.X_SWIFI_ADRES1}</td>
+      <td>${wifi.X_SWIFI_ADRES2}</td>
+      <td>${wifi.X_SWIFI_INSTL_FLOOR}</td>
+      <td>${wifi.X_SWIFI_INSTL_TY}</td>
+      <td>${wifi.X_SWIFI_INSTL_MBY}</td>
+      <td>${wifi.X_SWIFI_SVC_SE}</td>
+      <td>${wifi.X_SWIFI_CMCWR}</td>
+      <td>${wifi.X_SWIFI_CNSTC_YEAR}</td>
+      <td>${wifi.X_SWIFI_INOUT_DOOR}</td>
+      <td>${wifi.LAT}</td>
+      <td>${wifi.LNT}</td>
+      <td>${wifi.WORK_DTTM}</td>
+    </tr>
+  </c:forEach>
   </tbody>
 </table>
 <script>

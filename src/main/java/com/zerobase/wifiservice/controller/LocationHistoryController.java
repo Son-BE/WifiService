@@ -1,7 +1,8 @@
 package com.zerobase.wifiservice.controller;
 
-import com.zerobase.wifiservice.dao.Dao;
+//import com.zerobase.wifiservice.dao.WIfiDAO;
 import com.zerobase.wifiservice.dao.HistoryDao;
+import com.zerobase.wifiservice.dao.WifiDAO;
 import com.zerobase.wifiservice.dao.vo.WifiVo;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -16,13 +17,13 @@ import java.util.List;
 @WebServlet("/LocationServlet")
 public class LocationHistoryController extends HttpServlet {
 
-    private final Dao dao;
+    private final WifiDAO dao = new WifiDAO();
     private final HistoryDao historyDao;
 
 
     public LocationHistoryController() {
         this.historyDao = new HistoryDao();
-        this.dao = new Dao();
+//        this.dao = new WifiDAO();
     }
 
     @Override
